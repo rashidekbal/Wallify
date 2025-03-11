@@ -17,7 +17,7 @@ Clone the repository:
 bash
 Copy
 Edit
-git clone https://github.com/yourusername/wallify.git
+git clone https://github.com/rashidekbal/Wallify.git
 cd wallify
 Install dependencies:
 bash
