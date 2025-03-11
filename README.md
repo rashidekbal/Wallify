@@ -45,4 +45,3 @@ User authentication & profile customization
 Wallpaper categories & search functionality
 Favorite & download history
 ⭐ Star this repo if you like the project! 🚀
-
