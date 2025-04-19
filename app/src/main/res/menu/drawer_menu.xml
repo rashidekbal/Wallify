@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:title="@string/privacy_policy"
+    android:id="@+id/privacy"
+    android:icon="@drawable/privacy_ico"/>
+    <item
+        android:title="@string/feedback"
+        android:icon="@drawable/feedback_ico"
+        android:id="@+id/feedback"/>
+</menu>
