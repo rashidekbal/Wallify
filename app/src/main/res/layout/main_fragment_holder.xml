@@ -15,7 +15,7 @@
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_menu"
         android:id="@+id/Bottom_navigation"
-        />
+    />
 
 
 </RelativeLayout>

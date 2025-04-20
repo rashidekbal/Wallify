@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,11 +21,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,13 +37,14 @@ Toolbar toolbar;
 DrawerLayout drawerlayout;
 BottomNavigationView bottomNavigationView;
 NavigationView barView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Yeh line add kar — toolbar ko bhi upar se padding mil jaye
             toolbar.setPadding(0, systemBars.top, 0, 0);
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -53,10 +59,10 @@ NavigationView barView;
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.feedback){
-                    changeFragment(new feedbackFragment(),1);
+                    changeFragment(new feedbackFragment());
 
                 }else{
-                    changeFragment(new privacyFragment(),1);
+                    changeFragment(new privacyFragment());
 
                 }
                 drawerlayout.closeDrawer(GravityCompat.START);
@@ -67,12 +73,12 @@ NavigationView barView;
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()==R.id.home){
-                   changeFragment(new homeFragment(),0);
+                   changeFragment(new homeFragment());
                 } else if (item.getItemId()==R.id.Favourite) {
-                    changeFragment(new favouriteFragment(),1);
+                    changeFragment(new favouriteFragment());
 
                 }else{
-                    changeFragment(new ProfileFragment(),1);
+                    changeFragment(new ProfileFragment());
 
                 }
 
@@ -80,6 +86,7 @@ NavigationView barView;
             }
         });
         bottomNavigationView.setSelectedItemId(R.id.home);
+
     }
 
 
@@ -89,16 +96,14 @@ NavigationView barView;
         drawerlayout=findViewById(R.id.main);
         bottomNavigationView=findViewById(R.id.Bottom_navigation);
         barView=findViewById(R.id.sideBar);
+
     }
-    private void changeFragment(Fragment fragment,int flag){
+    private void changeFragment(Fragment fragment){
         FragmentManager manager= getSupportFragmentManager();
         @SuppressLint("CommitTransaction") FragmentTransaction fragmentTransaction= manager.beginTransaction();
-        if(flag==0){
-            fragmentTransaction.add( R.id.container,fragment);
 
-        }else{
             fragmentTransaction.replace(R.id.container,fragment);
-        }
+
         fragmentTransaction.commit();
     }
 
