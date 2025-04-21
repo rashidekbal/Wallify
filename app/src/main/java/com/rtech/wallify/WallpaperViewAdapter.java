@@ -21,11 +21,16 @@ public class WallpaperViewAdapter extends RecyclerView.Adapter<WallpaperViewAdap
   public WallpaperViewAdapter(ArrayList<ImageData> list, Context c){
       context=c;
       Datalist=list;
+      setHasStableIds(true);
 
   }
 
+  @Override
+  public long getItemId(int position) {
+    return Datalist.get(position).id;
+  }
 
-    @NonNull
+  @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
       View view=LayoutInflater.from(context).inflate(R.layout.wallpaper_card,parent,false);
@@ -34,8 +39,17 @@ public class WallpaperViewAdapter extends RecyclerView.Adapter<WallpaperViewAdap
 
     @Override
     public void onBindViewHolder(@NonNull WallpaperViewAdapter.viewHolder holder, @SuppressLint("RecyclerView") int position) {
+//int availableWidth=holder.imageview.getWidth();
+//int height=Datalist.get(position).height;
+//int width=Datalist.get(position).width;
+//int finalHeight=Math.round(height*(availableWidth/width));
+//ViewGroup.LayoutParams params=holder.imageview.getLayoutParams();
+//params.height=finalHeight;
+//params.width=availableWidth;
+//holder.imageview.setLayoutParams(params);
+
       Glide.with(context)
-              .load(Datalist.get(position).link)
+              .load(Datalist.get(position).PreviewLink)
               .placeholder(R.drawable.holder) // smooth look
               .into(holder.imageview);
 
@@ -46,6 +60,7 @@ public class WallpaperViewAdapter extends RecyclerView.Adapter<WallpaperViewAdap
         String link =Datalist.get(position).link;
         nextpage.putExtra("Imageurl",link);
         context.startActivity(nextpage);
+
       }
     });
 
