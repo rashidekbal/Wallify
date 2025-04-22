@@ -24,9 +24,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class homeFragment extends Fragment {
+public class homeFragment extends Fragment{
 RecyclerView recyclerView;
-
+int page=1;
+String Url;
+    ArrayList<ImageData> ImageList;
     public homeFragment() {
         // Required empty public constructor
     }
@@ -44,14 +46,16 @@ RecyclerView recyclerView;
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(layoutManager);
 
-        String Url="https://pixabay.com/api/?key=47570294-7b13d4203e4690bc9b9af1531&q=nature&image_type=photo&orientation=vertical&per_page=100&page1";
-        ArrayList<ImageData> ImageList=new ArrayList<>();
+        Url="https://pixabay.com/api/?key=47570294-7b13d4203e4690bc9b9af1531&q=nature&image_type=photo&orientation=vertical&per_page=100&page1";
+       ImageList=new ArrayList<>();
 
         WallpaperViewAdapter adapter=new WallpaperViewAdapter(ImageList,requireContext());
         recyclerView.setHasFixedSize(true);
         adapter.setHasStableIds(true);
         AndroidNetworking.initialize(view.getContext());
-        AndroidNetworking.get(Url).setPriority(Priority.HIGH).build().getAsJSONObject(new JSONObjectRequestListener() {
+        AndroidNetworking.get(Url).addQueryParameter("page","1").setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("res",response.toString());
@@ -93,5 +97,7 @@ RecyclerView recyclerView;
 
         return view;
     }
+
+
 
 }

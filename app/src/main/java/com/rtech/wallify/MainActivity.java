@@ -78,7 +78,7 @@ NavigationView barView;
                     changeFragment(new favouriteFragment());
 
                 }else{
-                    changeFragment(new ProfileFragment());
+                    changeFragment(new CategoryFragment());
 
                 }
 

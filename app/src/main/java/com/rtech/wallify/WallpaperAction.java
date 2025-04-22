@@ -50,7 +50,7 @@ ImageView imageView;
         imageView=findViewById(R.id.PreView_img);
         Intent intent=getIntent();
         String link=intent.getStringExtra("Imageurl");
-        Button btn=findViewById(R.id.setAction);
+   ImageView btn=findViewById(R.id.setAction);
         Glide.with(this)
                 .load(link)
                 .placeholder(R.drawable.holder) // smooth look

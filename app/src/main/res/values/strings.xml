@@ -6,8 +6,9 @@
     <string name="close_drawer">close</string>
     <string name="favourite">Favourite</string>
     <string name="home">home</string>
-    <string name="profile">profile</string>
+    <string name="profile">Category</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="image_desc">image</string>
+    <string name="setWallpaperDesc">setWallpaper</string>
 </resources>

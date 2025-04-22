@@ -13,13 +13,31 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/setAction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="setWallpaper"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_150"
+    android:background="@color/header_grey"
+    android:alpha="0.5"
+    android:layout_alignParentBottom="true">
 
-        android:layout_marginBottom="@dimen/dp_11"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_150"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:id="@+id/setAction"
+            android:layout_width="@dimen/dp_74"
+            android:layout_height="@dimen/dp_84"
+            android:contentDescription="@string/setWallpaperDesc"
+            android:src="@drawable/set_wallpaper_custom_icon"/>
+
+
+    </LinearLayout>
+
+
 </RelativeLayout>
