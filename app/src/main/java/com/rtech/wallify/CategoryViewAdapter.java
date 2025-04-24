@@ -40,11 +40,7 @@ setHasStableIds(true);
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Glide.with(context)
-                .load(data.get(position).image_link).
-                placeholder(R.drawable.holder)
-                .into(holder.imageView);
-        //set desc
+        Glide.with(context).load(data.get(position).image_link).placeholder(R.drawable.holder).into(holder.imageView);
          holder.desc.setText(data.get(position).desc);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

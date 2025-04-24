@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.bumptech.glide.Glide;
 
@@ -46,7 +47,7 @@ String Url;
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(layoutManager);
 
-        Url="https://pixabay.com/api/?key=47570294-7b13d4203e4690bc9b9af1531&q=nature&image_type=photo&orientation=vertical&per_page=100&page1";
+        Url="https://wallify-ebon.vercel.app/api/link?q=nature";
        ImageList=new ArrayList<>();
 
         WallpaperViewAdapter adapter=new WallpaperViewAdapter(ImageList,requireContext());
@@ -55,37 +56,26 @@ String Url;
         AndroidNetworking.initialize(view.getContext());
         AndroidNetworking.get(Url).addQueryParameter("page","1").setPriority(Priority.HIGH)
                 .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d("res",response.toString());
-                try {
-                    JSONArray linksObjArray=response.getJSONArray("hits");
-                    for (int i=0;i<linksObjArray.length();i++){
-                        JSONObject imageObject = linksObjArray.getJSONObject(i);
-                        int id=imageObject.getInt("id");
-                        String previewlink=imageObject.getString("webformatURL");
-                        String link=imageObject.getString("largeImageURL");
-                        int height=imageObject.getInt("webformatHeight");
-                        int width=imageObject.getInt("webformatWidth");
-                        ImageList.add(new ImageData(id,previewlink,link,height,width));
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i=0; i<response.length();i++){
+                            try {
+                                JSONObject obj=response.getJSONObject(i);
+                                ImageList.add(new ImageData(obj.getInt("id"),obj.getString("previewLink"), obj.getString("largeImage"), obj.getInt("largeHeight"), obj.getInt("largeWidth") ));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
                     }
-                    adapter.notifyDataSetChanged();
 
+                    @Override
+                    public void onError(ANError anError) {
 
-                } catch (JSONException e) {
-                  e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onError(ANError anError) {
-
-            }
-        });
-
+                    }
+                });
+// ImageList.add(new ImageData(id,previewlink,link,height,width));
         for(int i=0;i<ImageList.size();i++){
             Glide.with(this)
                     .load(ImageList.get(i).link)

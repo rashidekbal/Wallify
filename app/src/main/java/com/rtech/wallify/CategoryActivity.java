@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
@@ -45,30 +46,26 @@ public class CategoryActivity extends AppCompatActivity {
         StaggeredGridLayoutManager layout=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         WallpaperViewAdapter adapter =new WallpaperViewAdapter(list,this);
         AndroidNetworking.initialize(this);
-        AndroidNetworking.get(Url).setPriority(Priority.HIGH).build().getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray array=response.getJSONArray("hits");
-                    for (int i=0;i<array.length();i++){
-                        JSONObject obj=array.getJSONObject(i);
-                        list.add(new ImageData(obj.getInt("id"),
-                                obj.getString("webformatURL"),
-                                obj.getString("largeImageURL"),
-                                obj.getInt("webformatHeight"),
-                                obj.getInt("webformatWidth") ));
+        AndroidNetworking.get(Url).setPriority(Priority.HIGH).build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i=0; i<response.length();i++){
+                            try {
+                                JSONObject obj=response.getJSONObject(i);
+                                list.add(new ImageData(obj.getInt("id"),obj.getString("previewLink"), obj.getString("largeImage"), obj.getInt("largeHeight"), obj.getInt("largeWidth") ));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
                     }
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onError(ANError anError) {
+                    @Override
+                    public void onError(ANError anError) {
 
-            }
-        });
+                    }
+                });
 
         recyclerView.setLayoutManager(layout);
         recyclerView.setAdapter(adapter);
