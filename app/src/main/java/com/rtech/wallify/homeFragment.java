@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 
 public class homeFragment extends Fragment{
 RecyclerView recyclerView;
+ProgressBar progressbar;
 int page=1;
 String Url;
     ArrayList<ImageData> ImageList;
@@ -43,27 +46,32 @@ String Url;
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView=view.findViewById(R.id.recycler_view);
+        progressbar=view.findViewById(R.id.homeLoader);
         StaggeredGridLayoutManager layoutManager =new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(layoutManager);
 
-        Url="https://wallify-ebon.vercel.app/api/link?q=nature";
+        Url="https://wallify-ebon.vercel.app/api/links?q=nature";
        ImageList=new ArrayList<>();
 
         WallpaperViewAdapter adapter=new WallpaperViewAdapter(ImageList,requireContext());
         recyclerView.setHasFixedSize(true);
         adapter.setHasStableIds(true);
         AndroidNetworking.initialize(view.getContext());
+        progressbar.setVisibility(View.VISIBLE);
         AndroidNetworking.get(Url).addQueryParameter("page","1").setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        progressbar.setVisibility(View.GONE);
                         for(int i=0; i<response.length();i++){
                             try {
                                 JSONObject obj=response.getJSONObject(i);
                                 ImageList.add(new ImageData(obj.getInt("id"),obj.getString("previewLink"), obj.getString("largeImage"), obj.getInt("largeHeight"), obj.getInt("largeWidth") ));
                             } catch (JSONException e) {
+                                progressbar.setVisibility(View.GONE);
+                                Toast.makeText(view.getContext(), "error loading data", Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
                             }
                         }
@@ -72,6 +80,7 @@ String Url;
 
                     @Override
                     public void onError(ANError anError) {
+                        Toast.makeText(view.getContext(), "error loading data", Toast.LENGTH_SHORT).show();
 
                     }
                 });

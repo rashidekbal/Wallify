@@ -27,10 +27,22 @@
         </Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_Catagoryactivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <ProgressBar
+        android:id="@+id/categoryActivityLoader"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+</RelativeLayout>
+
+
 
 </LinearLayout>

@@ -2,6 +2,9 @@ package com.rtech.wallify;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 public class CategoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
+    ProgressBar progressbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,22 +44,27 @@ public class CategoryActivity extends AppCompatActivity {
         });
         setActionBar(toolbar);
         recyclerView=findViewById(R.id.recyclerview_Catagoryactivity);
+        progressbar=findViewById(R.id.categoryActivityLoader);
         Intent recieved=getIntent();
         String Url=recieved.getStringExtra("api");
         ArrayList<ImageData> list=new ArrayList<>();
         StaggeredGridLayoutManager layout=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         WallpaperViewAdapter adapter =new WallpaperViewAdapter(list,this);
+        progressbar.setVisibility(View.VISIBLE);
         AndroidNetworking.initialize(this);
         AndroidNetworking.get(Url).setPriority(Priority.HIGH).build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        progressbar.setVisibility(View.GONE);
                         for(int i=0; i<response.length();i++){
                             try {
                                 JSONObject obj=response.getJSONObject(i);
                                 list.add(new ImageData(obj.getInt("id"),obj.getString("previewLink"), obj.getString("largeImage"), obj.getInt("largeHeight"), obj.getInt("largeWidth") ));
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                progressbar.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }
                         adapter.notifyDataSetChanged();
@@ -63,6 +72,8 @@ public class CategoryActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
+                        progressbar.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "failed loading data", Toast.LENGTH_SHORT).show();
 
                     }
                 });
